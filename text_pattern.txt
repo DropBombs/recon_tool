@@ -1,0 +1,40 @@
+URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
+URL of the ICANN Whois Inaccuracy Complaint Form: https://www.icann.org/wicf/
+  https://www.icann.org/resources/pages/epp-status-codes
+https://domains.markmonitor.com/whois
+Web-based WHOIS:
+NOTICE: The expiration date displayed registrar's sponsorship of the domain name registration in the registry is
+currently set to expire. This date does not necessarily reflect the expiration
+date of the domain name registrant's agreement with the sponsoring
+registrar.  Users may consult the sponsoring registrar's Whois database to
+view the registrar's reported date of expiration for this registration.
+MarkMonitor reserves the right to modify these terms at any time.
+By submitting this query, you agree to abide by this policy.
+MarkMonitor Domain Management(TM)
+Protecting companies and consumers in a digital world.
+Visit MarkMonitor at https://www.markmonitor.com
+Contact us at +1.8007459229
+In Europe, at +44.02032062220
+By submitting a WHOIS query, you agree that you will use this data only for
+lawful purposes and that, under no circumstances will you use this data to:
+  (1) allow, enable, or otherwise support the transmission by email, telephone,
+or facsimile of mass, unsolicited, commercial advertising, or spam; or
+  (2) enable high volume, automated, or electronic processes that send queries,
+data, or email to MarkMonitor (or its systems) or the domain name contacts (or
+its systems).
+NOTICE: The expiration date displayed in this record is the date the
+registrar's sponsorship of the domain name registration in the registry is
+If you wish to contact this domain’s Registrant, Administrative, or Technical
+contact, and such email address is not visible above, you may do so via our web
+form, pursuant to ICANN’s Temporary Specification. To verify that you are not a
+robot, please enter your email address to receive a link to a page that
+facilitates email communication with the relevant contact(s).
+If you have a legitimate interest in viewing the non-public WHOIS details, send
+your request and the reasons for your request to whoisrequest@markmonitor.com
+and specify the domain name in the subject line. We will review that request and
+may ask for supporting documentation and explanation.
+The data in MarkMonitor’s WHOIS database is provided for information purposes,
+and to assist persons in obtaining information about or related to a domain
+name’s registration record. While MarkMonitor believes the data to be accurate,
+the data is provided "as is" with no guarantee or warranties regarding its
+accuracy.
