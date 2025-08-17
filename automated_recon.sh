@@ -6,12 +6,18 @@
 # List of used tools.
 REQ_TOOLS=("whois" "nmap" "dig" "host" "curl" "jq")
 
+# Definition of colors for better output.
+RED='\033[0;31m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
 # Definition of functions.
 # Function to handle error gracefully.
 function handle_error() {
   local exit_code="$1"
   local msg="$2"
-  echo "[-] Error occurred: $msg (Exit code: $exit_code) [-]"
+  echo "${RED}[-] Error occurred: $msg (Exit code: $exit_code) [-]$NC"
   exit "$exit_code"
 }
 
@@ -52,12 +58,12 @@ function log_creation() {
 
 # Function to check if target is up.
 function check_target() {
-  echo -e "[*] Verifying target's availability. [*]\n"
+  echo -e "${YELLOW}[*] Verifying target's availability. [*]$NC\n"
   if nc -zw1 "$target" 80 || nc -zw1 "$target" 443; then
-    echo -e "[+] Target $target is reachable [+]\n"
+    echo -e "${GREEN}[+] Target $target is reachable [+]$NC\n"
     return 0
   else
-    echo "[-] Target $target is unreachable. Try again. [-]"
+    echo -e "${RED}[-] Target $target is unreachable. Try again. [-]$NC"
     return 1
   fi
 }
@@ -88,7 +94,7 @@ function is_ip() {
 function validate_entry() {
   local input="$1"
   if [[ -z "$input" ]]; then
-    echo "[-] No IP address/Domain name provided. Try again. [-]"
+    echo "${RED}[-] No IP address or domain name provided. Try again. [-]$NC"
     return 1
   fi
   # Format input.
@@ -101,7 +107,7 @@ function validate_entry() {
 # Function to perform curl request on crt.sh.
 function fetch_certificate() {
   if validate_ip "$target"; then
-    echo "[-] Skipping certificate lookup for IP addresses. [-]" > "$CURL_TMP"
+    echo "${YELLOW}[-] Skipping certificate lookup for IP addresses. [-]$NC" > "$CURL_TMP"
     return 0
   fi
 
@@ -131,7 +137,7 @@ check_tools
 # Begin main execution.
 # Check if CLI command was provided.
 if [[ -n "$1" ]]; then
-  target=$(validate_entry "$1") || handle_error $? "[-] Error validating input. Try again. [-]"
+  target=$(validate_entry "$1") || handle_error $? "${RED}[-] Error validating input. Try again. [-]$NC"
 # Prompt user for target's IP address or domain name.
 else
   while true; do
@@ -142,8 +148,6 @@ else
     fi
   done
 fi
-
-# Check if target is reachable.
 
 # Defining output file. Use default if none provided.
 timestamp=$(date +"%m%d%Y_%H%M%S") # Default uses current time to create unique filenames.
@@ -160,7 +164,7 @@ CURL_TMP=$(mktemp) || handle_error "Unable to create temp file for Curl"
 
 TMP_FILES=("$WHOIS_TMP" "$NMAP_TMP" "$DNS_TMP" "$CURL_TMP")
 
-echo -e "[*] Starting reconnaissance. Please wait... [*]\n"
+echo -e "${YELLOW}[*] Starting reconnaissance. Please wait... [*]$NC\n"
 
 # Run commands in parallel for increased speed.
 # WHOIS Lookup.
@@ -206,7 +210,7 @@ fi
 if [[ ! -s "$LOGPATH" ]]; then
   echo "[-] No useful information was gathered. Please try again. [-]" >> "$LOGPATH"
 else # Display gathered information.
-  echo -e "[*] Scan complete. Results saved in $LOGPATH [*]\n"
+  echo -e "${GREEN}[+] Scan complete. Results saved in $LOGPATH [+]$NC\n"
   echo "[*] Showing first 20 lines [*]"
   head -n 20 "$LOGPATH"
 fi
