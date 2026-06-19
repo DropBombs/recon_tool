@@ -7,10 +7,17 @@
 REQ_TOOLS=("whois" "nmap" "dig" "host" "curl" "jq")
 
 # Definition of colors for better output.
-RED='\033[0;31m'
-GREEN='\033[1;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
+if [[ -t 1 ]]; then
+  RED='\033[0;31m'
+  GREEN='\033[1;32m'
+  YELLOW='\033[1;33m'
+  NC='\033[0m'
+else
+  RED=''
+  GREEN=''
+  YELLOW=''
+  NC=''
+fi
 
 # Definition of functions.
 # Function to handle error gracefully.
@@ -108,14 +115,16 @@ function fetch_certificate() {
 
   local response
   for i in {1..3}; do
-    response=$(curl -s "https://crt.sh/?q=$target&output=json") && break
+    response=$(curl -s -m 10 "https://crt.sh/?q=$target&output=json") && break
     sleep 2
   done
 
   if [[ -z "$response" || "$response" == "[]" ]]; then 
     echo "[-] No SSL certificates found. [-]" > "$CURL_TMP"
-  else
+  elif echo "$response" | jq . >/dev/null 2>&1; then
     echo "$response" | jq -r '.[] | "Issuer: \(.issuer_name)\nDomains: \(.name_value)\nIssued on: \(.entry_timestamp)\n---"' > "$CURL_TMP"
+  else
+    echo "[-] Certificate lookup failed. [-]" > "$CURL_TMP"
   fi
   return 0
 }
@@ -179,9 +188,9 @@ else
 fi
 
 # Ensure all parallel executions finish before proceeding.
-wait "$WHOIS_PID" || handle_error 1 "WHOIS collection encountered errors. [-]" > "$WHOIS_TMP"
-wait "$NMAP_PID" || handle_error 1 "Nmap execution encountered errors. [-]" > "$NMAP_TMP"
-wait "$DNS_PID" || handle_error 1 "DNS resolution encountered errors. [-]" > "$DNS_TMP"
+wait "$WHOIS_PID" || echo "[-] WHOIS collection encountered errors. [-]" > "$WHOIS_TMP"
+wait "$NMAP_PID" || echo "[-] Nmap execution encountered errors. [-]" > "$NMAP_TMP"
+wait "$DNS_PID" || echo  "[-] DNS resolution encountered errors. [-]" > "$DNS_TMP"
 if [[ -n "${CURL_PID:-}" && "$CURL_PID" =~ ^[0-9]+$ ]]; then
   wait "$CURL_PID" || echo  "[-] Certificate mapping encountered errors. [-]" > "$CURL_TMP"
 fi
