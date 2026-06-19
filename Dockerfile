@@ -12,19 +12,26 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sqlite3 \
     && rm -rf /var/lib/apt/lists/*
 
+# Create non-root user and group
+RUN groupadd -r recongroup && useradd -r -g recongroup -d /app reconuser
+
 WORKDIR /app
 
 # Install Python required dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ..
+COPY . .
 
-# Concede execution privileges
-RUN chmod +x core/automated_recon.sh
+# Concede execution privileges and transfer ownership
+RUN chmod +x core/automated_recon.sh && \
+    chown -R reconuser:recongroup /app
+
+# Switch execution to unprivileged user
+USER reconuser
 
 # Port used by Flask API
 EXPOSE 5000
 
-# Init
+# Init Gateway
 CMD ["python", "web/routes.py"]
