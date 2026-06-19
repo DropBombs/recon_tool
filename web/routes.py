@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import subprocess
 import os
-from .database import init_db, log_scan_result
+from web.database import init_db, log_scan_result
 
 # Macros
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -31,7 +31,7 @@ def trigger_recon():
 		output_data = result.stdout
 		status_execution = "Success"
 
-		# Persists info in local database.
+		# Persists data straight into local SQLite instance.
 		log_scan_result(target, status_execution, output_data)
 
 		return jsonify({
@@ -51,4 +51,4 @@ def trigger_recon():
 		return jsonify({"error": "Execution exceeded the time limit."}), 504
 
 if __name__ == '__main__':
-	app.run(debug=True, port=5000)
+	app.run(host='0.0.0.0', debug=True, port=5000)
